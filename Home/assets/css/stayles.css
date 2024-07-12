@@ -1,0 +1,26 @@
+/* styles.css */
+body {
+  background-image: url('../img/bglogin.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.ikon {
+  height: 100px;
+  width: 100px;
+  margin: 0 auto;
+  display: block;
+}
+p {
+  font-size: 18px;
+}
