@@ -35,7 +35,14 @@ app.get('/CardHome', (req, res) => {
 //     res.render("InputProduct",{users: users, title: "hasan"})
 // })
 app.get('/Checkout', (req, res) => {
-    res.render("Checkout")
+    client.query('SELECT * FROM public.kasir_barang', (err, result) => {
+        if (err) {
+            res.send(err.message);
+        } else {
+            const users = result.rows;
+            res.render('Checkout', { users: users, product: null, title: 'Product Management' });
+        }
+    });
 })
 app.get('/OrderProduct', (req, res) => {
     res.render("OrderProduct")
