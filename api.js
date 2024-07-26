@@ -23,6 +23,13 @@ client.connect(err => {
     }
 })
 
+// app.use(session({
+//     secret: 'query', // Ganti dengan kunci rahasia Anda
+//     resave: false, // Session tidak akan disimpan kembali jika tidak ada perubahan
+//     saveUninitialized: true, // Session baru akan disimpan walaupun belum ada perubahan
+//     cookie: { secure: false } // Set secure ke true jika menggunakan HTTPS
+// }))
+
 app.get('/', (req, res) => {
     res.render("index")
 })
@@ -30,10 +37,7 @@ app.get('/', (req, res) => {
 app.get('/CardHome', (req, res) => {
     res.render("CardHome")
 })
-// app.get('/InputProduct', (req, res) => {
-//     const users= JSON.parse(JSON.stringify(res))
-//     res.render("InputProduct",{users: users, title: "hasan"})
-// })
+
 app.get('/Checkout', (req, res) => {
     client.query('SELECT * FROM public.kasir_barang', (err, result) => {
         if (err) {
@@ -44,15 +48,16 @@ app.get('/Checkout', (req, res) => {
         }
     });
 })
+
 app.get('/OrderProduct', (req, res) => {
     res.render("OrderProduct")
 })
 app.get('/PaymentProduct', (req, res) => {
     res.render("PaymentProduct")
 })
-app.get('/Register', (req, res) => {
-    res.render("Register")
-})
+// app.get('/Register', (req, res) => {
+//     res.render("Register")
+// })
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -117,55 +122,44 @@ app.get('/editProduct/:id', (req, res) => {
     });
 });
 
-app.get('/deleteProduct/:id', (req, res) => {
-    const productId = req.params.id;
-    client.query('DELETE FROM public.kasir_barang WHERE id = $1', [productId], (err, result) => {
+app.post('/saveRegister', (req, res) => {
+    const { id, username, email, pasword } = req.body;
+    if (id) {
+        // Update existing product
+        client.query(
+            `UPDATE public.akun SET username = $1, email = $2, pasword = $3 WHERE id = $4`,
+            [username, email, pasword, id],
+            (err, result) => {
+                if (err) {
+                    res.send(err.message);
+                } else {
+                    res.redirect('/Register');
+                }
+            }
+        );
+    } else {
+        client.query(
+            `INSERT INTO public.akun (username, email, pasword) VALUES ($1, $2, $3)`,
+            [username, email, pasword],
+            (err, result) => {
+                if (err) {
+                    res.send(err.message);
+                } else {
+                    res.redirect('/Register');
+                }
+            }
+        );
+    }
+
+});
+
+app.get('/Register', (req, res) => {
+    client.query('SELECT * FROM public.akun', (err, result) => {
         if (err) {
             res.send(err.message);
         } else {
-            res.redirect('/InputProduct');
+            const users = result.rows;
+            res.render('Register', { users: users, title: 'users' });
         }
     });
 });
-
-
-app.post('/views',(req,res)=>{
-
-    const {nama_barang, harga_beli, harga_jual} = req.body
-
-    client.query((`INSERT INTO kasir_barang(nama_barang,harga_beli,harga_jual) values('${nama_barang}','${harga_beli}','${harga_jual}')`),(err,result)=>{
-        if (!err) {
-            res.send('Insert sucsess') //mengirim hasil
-        } else {
-            res.send(err.message) // mngirim error
-        }
-    })
-
-
-})
-
-app.put('/views/:id', (req,res)=>{
-
-    const {nama_barang, harga_beli, harga_jual} = req.body
-
-    client.query((`UPDATE kasir_barang SET nama_barang = '${nama_barang}', harga_beli = '${harga_beli}', harga_jual = '${harga_jual}' WHERE id='${req.params.id}'`),(err,result) =>{
-        if (!err) {
-            res.send('Update sucsess') //mengirim hasil
-        } else {
-            res.send(err.message) // mngirim error
-        }
-    } )
-})
-
-app.delete('/views/:id',(req,res)=>{
-
-    client.query((`DELETE FROM kasir_barang WHERE id='${req.params.id}'`),(err,result)=>{
-
-        if (!err) {
-            res.send('Delete sucsess') //mengirim hasil
-        } else {
-            res.send(err.message) // mngirim error
-        }
-    })
-
-})

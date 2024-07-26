@@ -18,40 +18,42 @@
     <h1 class="text-2xl text-center mt-8">KasirQu</h1>
 
     <div class="max-w-md mx-auto mt-8">
-        <form id="registerForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form id="registerForm" action='/saveRegister' method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <input type="hidden" id="RegisterId" name="id" for="reg">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
-                    Name
+                    Username
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Name">
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">
-                    Phone Number
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" placeholder="Phone Number">
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" name="username" type="text" placeholder="Name">
             </div>
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
                     Email Address
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email Address">
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="Email Address">
             </div>
-            <button id="registerBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="pasword">
+                    Password
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="pasword" name="pasword" type="password" placeholder="********">
+            </div> 
+            <button id="registerBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                 Register
             </button>
         </form>
 
         <div class="text-center">
-            Already have an account <a href="/login.html" class="text-blue-500">Login</a>
+            Already have an account <a href="/" class="text-blue-500">Login</a>
         </div>
     </div>
 
     <script>
         document.getElementById('registerBtn').addEventListener('click', function() {
-            var name = document.getElementById('name').value;
-            var phone = document.getElementById('phone').value;
+            var reg = document.getElementById('RegisterId').value='';
+            var name = document.getElementById('username').value;
             var email = document.getElementById('email').value;
+            var pasword = document.getElementById('pasword').value;
         });
     </script>
 </body>
