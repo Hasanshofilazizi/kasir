@@ -122,6 +122,18 @@ app.get('/editProduct/:id', (req, res) => {
     });
 });
 
+
+app.get('/deleteProduct/:id', (req, res) => {
+    const productId = req.params.id;
+    client.query('DELETE FROM public.kasir_barang WHERE id = $1', [productId], (err, result) => {
+        if (err) {
+            res.send(err.message);
+        } else {
+            res.redirect('/InputProduct');
+        }
+    });
+});
+
 app.post('/saveRegister', (req, res) => {
     const { id, username, email, pasword } = req.body;
     if (id) {
