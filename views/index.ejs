@@ -23,27 +23,39 @@
           <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" />
         </div>
         <div class="mb-6">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="password"> Password </label>
-          <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************" />
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="pasword"> Password </label>
+          <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="pasword" type="pasword" placeholder="******************" />
         </div>
-        <button id="loginBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">Login</button>
+        <button id="loginBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Login</button>
       </form>
 
       <div class="text-center bg-white shadow-md rounded px-8 pt-2 pb-2 mb-4">Don't have an account <a href="Register" class="text-blue-500">Register</a></div>
     </div>
 
+    
     <script>
-      document.getElementById('loginBtn').addEventListener('click', function () {
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
+      document.getElementById('loginForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          var username = document.getElementById('username').value;
+          var pasword = document.getElementById('pasword').value;
 
-        if (username === 'admin' && password === 'admin') {
-          window.location.href = 'CardHome';
-        } else {
-          alert('Invalid username or password. Please try again.');
-        }
+          fetch('/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ username: username, pasword: pasword })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  window.location.href = 'CardHome';
+              } else {
+                  alert('Invalid username or password. Please try again.');
+              }
+          });
       });
-    </script>
+  </script>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -6,7 +6,10 @@ const { user } = require('pg/lib/defaults')
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'Home')));
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.set('view engine','ejs')
 app.set('views','views')
 
@@ -59,7 +62,7 @@ app.get('/PaymentProduct', (req, res) => {
 //     res.render("Register")
 // })
 
-app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/InputProduct', (req, res) => {
     client.query('SELECT * FROM public.kasir_barang', (err, result) => {
@@ -175,3 +178,24 @@ app.get('/Register', (req, res) => {
         }
     });
 });
+
+app.post('/login', async (req, res) => {
+    const { username, pasword } = req.body;
+  
+    try {
+      const result = await client.query('SELECT * FROM public.akun WHERE username = $1 AND pasword = $2', [username, pasword]);
+  
+      if (result.rows.length > 0) {
+        res.json({ success: true });
+      } else {
+        res.json({ success: false });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false });
+    }
+  });
+  
+  app.get('/login', (req, res) => {
+    res.render('index');  // Render the EJS login page
+  });
